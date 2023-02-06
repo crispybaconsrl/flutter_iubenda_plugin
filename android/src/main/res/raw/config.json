@@ -1,0 +1,18 @@
+{
+  "siteId": 2938102,
+  "cookiePolicyId": 87278796,
+  "enableTcf": true,
+  "enableGdpr": true,
+  "banner": {
+    "content": "hello",
+    "acceptButtonDisplay": "true",
+    "customizeButtonDisplay": "true",
+    "backgroundColor": "#FFF",
+    "textColor": "#FFFFFF",
+    "acceptButtonColor": "#6AA84F",
+    "acceptButtonCaptionColor": "white",
+    "customizeButtonColor": "transparent",
+    "customizeButtonCaptionColor": "#FFF",
+    "rejectButtonDisplay": "true"
+  }
+}
