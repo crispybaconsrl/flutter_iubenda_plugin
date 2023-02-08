@@ -1,0 +1,293 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.3.2 (swiftlang-1200.0.45 clang-1200.0.32.28)
+// swift-module-flags: -target armv7-apple-ios10.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name iubenda
+import Foundation
+import Swift
+import SystemConfiguration
+import UIKit
+import WebKit
+@objc public class WebViewController : ObjectiveC.NSObject, WebKit.WKNavigationDelegate, WebKit.WKScriptMessageHandler, WebKit.WKUIDelegate {
+  @objc weak public var delegate: iubenda.WebViewControllerDelegate?
+  public init(webView: WebKit.WKWebView, config: iubenda.IubendaCMPConfiguration)
+  public func canClose() -> Swift.Bool
+  public func closeNotice()
+  @objc public func userContentController(_ userContentController: WebKit.WKUserContentController, didReceive message: WebKit.WKScriptMessage)
+  @objc public func webView(_ webView: WebKit.WKWebView, decidePolicyFor navigationAction: WebKit.WKNavigationAction, decisionHandler: @escaping (WebKit.WKNavigationActionPolicy) -> Swift.Void)
+  @objc public func webView(_ webView: WebKit.WKWebView, createWebViewWith configuration: WebKit.WKWebViewConfiguration, for navigationAction: WebKit.WKNavigationAction, windowFeatures: WebKit.WKWindowFeatures) -> WebKit.WKWebView?
+  @objc public func webView(_ webView: WebKit.WKWebView, decidePolicyFor navigationResponse: WebKit.WKNavigationResponse, decisionHandler: @escaping (WebKit.WKNavigationResponsePolicy) -> Swift.Void)
+  @objc public func webView(_ webView: WebKit.WKWebView, didStartProvisionalNavigation navigation: WebKit.WKNavigation!)
+  @objc public func webView(_ webView: WebKit.WKWebView, didFinish navigation: WebKit.WKNavigation!)
+  @objc deinit
+  @objc override dynamic public init()
+}
+extension NSNotification.Name {
+  public static var ConsentChanged: Foundation.NSNotification.Name
+}
+@objc extension NSNotification {
+  @objc public static var ConsentChanged: Foundation.NSNotification.Name
+}
+@_inheritsConvenienceInitializers @objc public class IubendaCMP : ObjectiveC.NSObject {
+  @objc public class func initialize(with config: iubenda.IubendaCMPConfiguration)
+  public static var storage: iubenda.CMPStorage {
+    get
+  }
+  @available(*, deprecated, renamed: "accept")
+  @objc public class func acceptDefaultConsent()
+  @objc public class func accept()
+  @available(*, deprecated, renamed: "openTcfPreferences")
+  @objc public class func showConsentPreferences(from fromViewController: UIKit.UIViewController)
+  @objc public class func openTcfPreferences(from fromViewController: UIKit.UIViewController)
+  @available(*, deprecated, renamed: "openCookiePolicy")
+  @objc public class func showCookiePolicy(from fromViewController: UIKit.UIViewController)
+  @objc public class func openCookiePolicy(from fromViewController: UIKit.UIViewController)
+  @available(*, deprecated, renamed: "openTcfVendorsPreferences")
+  @objc public class func showVendorsPreferences(from fromViewController: UIKit.UIViewController)
+  @objc public class func openTcfVendorsPreferences(from fromViewController: UIKit.UIViewController)
+  @objc public class func saveConsent(preferences json: Swift.String, timestamp: Foundation.Date)
+  @objc public class func hasConsent() -> Swift.Bool
+  @objc public class func askConsent(from fromViewController: UIKit.UIViewController)
+  @objc public class func shouldGetConsent() -> Swift.Bool
+  @objc public class func isGooglePersonalized() -> Swift.Bool
+  @objc public class func isPurposeEnabled(id: Swift.Int) -> Swift.Bool
+  @objc public class func isConsentGiven() -> Swift.Bool
+  @available(*, deprecated, renamed: "openPreferences")
+  @objc public class func editConsent(from fromViewController: UIKit.UIViewController)
+  @objc public class func openPreferences(from fromViewController: UIKit.UIViewController)
+  @objc deinit
+  @objc override dynamic public init()
+}
+@_inheritsConvenienceInitializers @objc public class IubendaCMPConfiguration : ObjectiveC.NSObject {
+  @objc public var csVersion: Swift.String
+  @objc public var gdprEnabled: Swift.Bool
+  @objc public var forceConsent: Swift.Bool
+  @objc public var googleAds: Swift.Bool
+  @objc public var applyStyles: Swift.Bool
+  @objc public var acceptIfDismissed: Swift.Bool
+  @objc public var preventDismissWhenLoaded: Swift.Bool
+  @objc public var skipNoticeWhenOffline: Swift.Bool
+  @objc public var siteId: Swift.String
+  @objc public var cookiePolicyId: Swift.String
+  @objc public var cssUrl: Swift.String
+  @objc public var cssFile: Swift.String?
+  @objc public var cssContent: Swift.String?
+  @objc public var jsonFile: Swift.String?
+  @objc public var jsonContent: Swift.String?
+  @objc public var dismissColor: UIKit.UIColor?
+  @objc override dynamic public var description: Swift.String {
+    @objc get
+  }
+  @objc deinit
+  @objc override dynamic public init()
+}
+@objc public enum SubjectToGDPR : Swift.Int {
+  case unknown = -1
+  case no = 0
+  case yes = 1
+  public typealias RawValue = Swift.Int
+  public init?(rawValue: Swift.Int)
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public protocol CMPStorage {
+  @objc var consentString: Swift.String { get set }
+  @objc var consentTimestamp: Foundation.Date { get set }
+  @objc var googlePersonalized: Swift.Bool { get set }
+  @objc var vendorConsents: Swift.String { get set }
+  @objc var purposeConsents: Swift.String { get set }
+  @objc var preferenceExpressed: Swift.Bool { get set }
+  @objc func clear()
+  @objc func isVendorConsentGivenFor(id: Swift.Int) -> Swift.Bool
+  @objc func isPurposeConsentGivenFor(id: Swift.Int) -> Swift.Bool
+}
+public enum ConsentStringError : Swift.Error {
+  case base64DecodingFailed
+  public static func == (a: iubenda.ConsentStringError, b: iubenda.ConsentStringError) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+}
+@objc public enum GDPRApplies : Swift.Int {
+  case unknown = -1
+  case no = 0
+  case yes = 1
+  public typealias RawValue = Swift.Int
+  public init?(rawValue: Swift.Int)
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc @_inheritsConvenienceInitializers public class CMPStorageV1 : ObjectiveC.NSObject, iubenda.CMPStorage {
+  @objc public var consentString: Swift.String {
+    @objc get
+    @objc set(value)
+  }
+  @objc public var consentTimestamp: Foundation.Date {
+    @objc get
+    @objc set(value)
+  }
+  @objc public var googlePersonalized: Swift.Bool {
+    @objc get
+    @objc set(value)
+  }
+  @objc public var preferenceExpressed: Swift.Bool {
+    @objc get
+    @objc set(value)
+  }
+  public var cmpPresent: Swift.Bool {
+    get
+    set(value)
+  }
+  @objc public var vendorConsents: Swift.String {
+    @objc get
+    @objc set(value)
+  }
+  @objc public var purposeConsents: Swift.String {
+    @objc get
+    @objc set(value)
+  }
+  @objc public var subjectToGDPR: iubenda.SubjectToGDPR {
+    @objc get
+    @objc set(value)
+  }
+  @objc public func clear()
+  @objc public func isVendorConsentGivenFor(id: Swift.Int) -> Swift.Bool
+  @objc public func isPurposeConsentGivenFor(id: Swift.Int) -> Swift.Bool
+  @objc deinit
+  @objc override dynamic public init()
+}
+public class CMPStorageV2 : iubenda.CMPStorage {
+  public init()
+  @objc public var preferenceExpressed: Swift.Bool {
+    @objc get
+    @objc set(value)
+  }
+  public var sdkId: Swift.Int {
+    get
+    set(value)
+  }
+  public var sdkVersion: Swift.Int {
+    get
+    set(value)
+  }
+  public var policyVersion: Swift.Int {
+    get
+    set(value)
+  }
+  public var publisherCC: Swift.String {
+    get
+    set(value)
+  }
+  public var purposeOneTreatment: Swift.Bool {
+    get
+    set(value)
+  }
+  public var nonStandardStacks: Swift.Bool {
+    get
+    set(value)
+  }
+  @objc public var consentString: Swift.String {
+    @objc get
+    @objc set(value)
+  }
+  @objc public var consentTimestamp: Foundation.Date {
+    @objc get
+    @objc set(value)
+  }
+  @objc public var googlePersonalized: Swift.Bool {
+    @objc get
+    @objc set(value)
+  }
+  @objc public var vendorConsents: Swift.String {
+    @objc get
+    @objc set(value)
+  }
+  @objc public var purposeConsents: Swift.String {
+    @objc get
+    @objc set(value)
+  }
+  public var gdprApplies: iubenda.GDPRApplies {
+    get
+    set(value)
+  }
+  public var vendorLegitimateInterestString: Swift.String {
+    get
+    set(value)
+  }
+  public var purposeLegitimateInterest: Swift.String {
+    get
+    set(value)
+  }
+  public var specialFeaturesOptIns: Swift.String {
+    get
+    set(value)
+  }
+  public var publisherConsent: Swift.String {
+    get
+    set(value)
+  }
+  public var publisherLegitimateInterest: Swift.String {
+    get
+    set(value)
+  }
+  public var publisherCustomPurposes: Swift.String {
+    get
+    set(value)
+  }
+  public var publisherCustomPurposesLegitimateInterest: Swift.String {
+    get
+    set(value)
+  }
+  public func setPublisherRestrictions(restrictions: Swift.Dictionary<Swift.String, Swift.String>)
+  @objc public func clear()
+  @objc public func isVendorConsentGivenFor(id: Swift.Int) -> Swift.Bool
+  @objc public func isPurposeConsentGivenFor(id: Swift.Int) -> Swift.Bool
+  @objc deinit
+}
+@objc public protocol WebViewControllerDelegate {
+  @objc func receivedConsent(preferences: Swift.String)
+  @objc func onError(url: Foundation.URL?)
+  @objc func openLink(url: Swift.String)
+  @objc func openExternalLink(url: Foundation.URL) -> Swift.Bool
+  @objc func onLargePopup()
+  @objc func onSmallPopup()
+  @objc func onCSReady()
+  @objc func onNavigationStart()
+  @objc func onNavigationFinish()
+}
+@objc @_hasMissingDesignatedInitializers public class Preferences : ObjectiveC.NSObject {
+  @objc public var consent: Swift.Bool
+  @objc public var gdprApplies: Swift.Bool
+  @objc public var googleAdsPersonalized: Swift.Bool
+  @objc public var tcf: Swift.String?
+  @objc public var tcfv2: Swift.String?
+  @objc public var purposes: [Swift.String : Swift.Bool]?
+  @objc public var tcfv2InAppTCData: iubenda.TCF2Data?
+  @objc deinit
+  @objc override dynamic public init()
+}
+@objc @_hasMissingDesignatedInitializers public class TCF2Data : ObjectiveC.NSObject {
+  @objc public var tcString: Swift.String
+  @objc public var tcfPolicyVersion: Swift.Int
+  @objc public var cmpId: Swift.Int
+  @objc public var cmpVersion: Swift.Int
+  @objc public var gdprApplies: iubenda.GDPRApplies
+  @objc public var useNonStandardStacks: Swift.Bool
+  @objc public var purposeOneTreatment: Swift.Bool
+  @objc public var publisherCC: Swift.String
+  @objc public var vendor: iubenda.TCF2DataConsents?
+  @objc public var purpose: iubenda.TCF2DataConsents?
+  @objc public var specialFeatureOptins: Swift.String
+  @objc public var publisher: iubenda.TCF2DataConsents?
+  @objc deinit
+  @objc override dynamic public init()
+}
+@objc @_hasMissingDesignatedInitializers public class TCF2DataConsents : ObjectiveC.NSObject {
+  @objc public var consents: Swift.String
+  @objc public var legitimateInterests: Swift.String
+  @objc public var customPurpose: iubenda.TCF2DataConsents?
+  @objc public var restrictions: [Swift.String : Swift.String]?
+  @objc deinit
+  @objc override dynamic public init()
+}
