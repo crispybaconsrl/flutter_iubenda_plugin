@@ -7,19 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.iubenda.iab.IubendaCMP
 import com.iubenda.iab.IubendaCMPChangeListener
 import com.iubenda.iab.IubendaCMPConfig
+import com.iubenda.iab.internal.IubendaCMPInternal
 
 
 class Iub : AppCompatActivity(), IubendaCMPChangeListener {
-    private val configuration = IubendaCMPConfig.builder()
-        .gdprEnabled(true)
-        .siteId("2938102")
-        .cookiePolicyId("87278796")
-        .googleAds(true)
-//        .applyStyles(true)
-//        .cssResource(R.raw.custom_style)
-//        .jsonResource(R.raw.config)
-        .acceptIfDismissed(false)
-        .build()
 
     private var bannerIsShowed = false
     private var isConsentInvoked = false
@@ -27,17 +18,32 @@ class Iub : AppCompatActivity(), IubendaCMPChangeListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_iub)
+
+        val siteId = intent.getStringExtra("siteId")
+        val cookiesId = intent.getStringExtra("cookiesId")
+        val showPreferences = intent.getBooleanExtra("showPreferences", false)
+
+        val configuration = IubendaCMPConfig.builder()
+            .gdprEnabled(true)
+            .siteId(siteId)
+            .cookiePolicyId(cookiesId)
+            .googleAds(true)
+            .acceptIfDismissed(false)
+            .build()
+
         bannerIsShowed = false
         IubendaCMP.initialize(this, configuration)
 
-        val consent = IubendaCMP.isConsentGiven()
+        if (showPreferences) {
+            IubendaCMP.openPreferences(this)
+        } else {
+            val hasExpressedPreferences = IubendaCMP.getStorage().hasExpressedPreference()
+            if (hasExpressedPreferences) {
+                returnConsentResult()
+            }
 
-        if (consent) {
-            returnConsentResult(consent = consent)
+            IubendaCMP.askConsent(this)
         }
-
-        IubendaCMP.askConsent(this)
-
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -92,8 +98,34 @@ class Iub : AppCompatActivity(), IubendaCMPChangeListener {
             userConsent = IubendaCMP.isConsentGiven()
         }
         val resultIntent = Intent()
-        resultIntent.putExtra("consent_key", userConsent)
+        val purposeString = IubendaCMP.getStorage().purposesString
+        val isGooglePersonalised = checkPersonalizedAds(purposes = purposeString)
+        resultIntent.putExtra("consent_key", isGooglePersonalised)
         setResult(RESULT_OK, resultIntent)
         this.finish()
+    }
+
+    private fun checkPersonalizedAds(purposes: String) : Boolean {
+        if (purposes.length < 10) {
+            return false;
+        } else {
+            var isPersonalised = true;
+            val googlePersonalisedPurposes = listOf<Int>(1,2,3,4,7,9,10)
+            purposes.forEachIndexed { index, c ->
+                if (googlePersonalisedPurposes.contains(index + 1)) {
+                    val purposeValue = convertStringToBoolean(value = c)
+                    isPersonalised = isPersonalised.and(purposeValue)
+                }
+            }
+            return isPersonalised;
+        }
+        return false;
+    }
+
+    private fun convertStringToBoolean(value: Char) : Boolean {
+        if (value == '1') {
+            return true
+        }
+        return false
     }
 }

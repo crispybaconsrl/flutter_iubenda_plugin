@@ -1,18 +1,32 @@
 {
+  "lang": "en",
   "siteId": 2938102,
   "cookiePolicyId": 87278796,
+  "consentOnContinuedBrowsing": false,
+  "perPurposeConsent": true,
+  "invalidateConsentWithoutLog": true,
+  "floatingPreferencesButtonDisplay": "bottom-right",
   "enableTcf": true,
-  "enableGdpr": true,
+  "googleAdditionalConsentMode": true,
+  "tcfPurposes": {
+    "1": true,
+    "2": true,
+    "3": true,
+    "4": true,
+    "5": "consent_only",
+    "6": "consent_only",
+    "7": "consent_only",
+    "8": "consent_only",
+    "9": "consent_only",
+    "10": "consent_only"
+  },
   "banner": {
-    "content": "hello",
-    "acceptButtonDisplay": "true",
-    "customizeButtonDisplay": "true",
-    "backgroundColor": "#FFF",
-    "textColor": "#FFFFFF",
-    "acceptButtonColor": "#6AA84F",
-    "acceptButtonCaptionColor": "white",
-    "customizeButtonColor": "transparent",
-    "customizeButtonCaptionColor": "#FFF",
-    "rejectButtonDisplay": "true"
+    "acceptButtonDisplay": true,
+    "rejectButtonDisplay": true,
+    "closeButtonRejects": true,
+    "customizeButtonDisplay": true,
+    "explicitWithdrawal": true,
+    "listPurposes": true,
+    "position": "float-top-center"
   }
 }

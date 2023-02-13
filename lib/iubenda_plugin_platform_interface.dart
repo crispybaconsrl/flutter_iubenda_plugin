@@ -1,3 +1,4 @@
+import 'package:iubenda_plugin/iubenda_data.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'iubenda_plugin_method_channel.dart';
@@ -27,7 +28,7 @@ abstract class IubendaPluginPlatform extends PlatformInterface {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
-  Future<bool> getUserConsent() {
+  Future<bool> getUserConsent({required IubendaData iubendaData}) {
     throw UnimplementedError('getUserConsent() has not been implemented.');
   }
 }

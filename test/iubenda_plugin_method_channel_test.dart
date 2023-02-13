@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:iubenda_plugin/iubenda_data.dart';
 import 'package:iubenda_plugin/iubenda_plugin_method_channel.dart';
 
 void main() {
@@ -29,6 +30,6 @@ void main() {
   });
 
   test('check_consent', () async {
-    expect(await platform.getUserConsent(), true);
+    expect(await platform.getUserConsent(iubendaData: IubendaData(siteId: "*******", cookiesId: "*******")), true);
   });
 }
