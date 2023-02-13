@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:iubenda_plugin/iubenda_data.dart';
 import 'package:iubenda_plugin/iubenda_plugin.dart';
 import 'package:iubenda_plugin/iubenda_plugin_platform_interface.dart';
 import 'package:iubenda_plugin/iubenda_plugin_method_channel.dart';
@@ -12,7 +13,8 @@ class MockIubendaPluginPlatform
   Future<String?> getPlatformVersion() => Future.value('42');
 
   @override
-  Future<bool> getUserConsent() => Future.value(true);
+  Future<bool> getUserConsent({required IubendaData iubendaData}) => Future.value(true);
+
 }
 
 void main() {
@@ -35,6 +37,6 @@ void main() {
     MockIubendaPluginPlatform fakePlatform = MockIubendaPluginPlatform();
     IubendaPluginPlatform.instance = fakePlatform;
 
-    expect(await iubendaPlugin.getUserConsent(), true);
+    expect(await iubendaPlugin.getUserConsent(siteId: "*****", cookiesId: "******"), true);
   });
 }

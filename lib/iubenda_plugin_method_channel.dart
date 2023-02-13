@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:iubenda_plugin/iubenda_data.dart';
 
 import 'iubenda_plugin_platform_interface.dart';
 
@@ -16,8 +17,8 @@ class MethodChannelIubendaPlugin extends IubendaPluginPlatform {
   }
 
   @override
-  Future<bool> getUserConsent() async {
-    final consent = await methodChannel.invokeMethod('check_consent') ?? false;
+  Future<bool> getUserConsent({required IubendaData iubendaData}) async {
+    final consent = await methodChannel.invokeMethod('check_consent', iubendaData.toJson()) ?? false;
     return consent as bool;
   }
 }

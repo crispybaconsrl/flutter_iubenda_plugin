@@ -15,7 +15,8 @@ import org.json.JSONObject
 
 
 /** IubendaPlugin */
-class IubendaPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, PluginRegistry.ActivityResultListener{
+class IubendaPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
+    PluginRegistry.ActivityResultListener {
     /// The MethodChannel that will the communication between Flutter and native Android
     ///
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -35,13 +36,17 @@ class IubendaPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, PluginReg
                 result.success("Android ${android.os.Build.VERSION.RELEASE}")
             }
             "check_consent" -> {
+                var arguments = call.arguments<HashMap<String, Any>>()
+                val siteId: String = arguments?.get("siteId") as String
+                val cookiesId: String = arguments?.get("cookiesId") as String
+                val showPreferences: Boolean = arguments?.get("showPreferences") as Boolean
                 consentResult = result;
-                    if (activity.applicationContext != null) {
-                    val intent = Intent(
-                        activity.applicationContext,
-                        Iub::class.java
-                    );
-                    activity.startActivityForResult(intent,CHECK_CONSENT_FROM_IUBENDA)
+                if (activity.applicationContext != null) {
+                    val intent = Intent(activity.applicationContext, Iub::class.java)
+                    intent.putExtra("siteId", siteId)
+                    intent.putExtra("cookiesId", cookiesId)
+                    intent.putExtra("showPreferences", showPreferences)
+                    activity.startActivityForResult(intent, CHECK_CONSENT_FROM_IUBENDA)
                 }
             }
             else -> {

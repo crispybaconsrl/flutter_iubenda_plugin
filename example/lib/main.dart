@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> {
 
   chechConsent() {
     Future.delayed(const Duration(seconds: 5), () {
-      IubendaPlugin.checkConsent();
+      IubendaPlugin.checkConsent(siteId: "2938102", cookiesId: "87278796");
     });
   }
 
@@ -99,12 +99,22 @@ class NewScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('New Screen')),
       body: Center(
-        child: TextButton(
-          onPressed: () {
-            final consent = IubendaPlugin.hasUserConsent();
-            print("consent is $consent");
-          },
-          child: Text('consent'),
+        child: Column(
+          children: [
+            TextButton(
+              onPressed: () {
+                final consent = IubendaPlugin.hasUserConsent();
+                print("consent is $consent");
+              },
+              child: Text('consent'),
+            ),
+            TextButton(
+              onPressed: () {
+                final consent = IubendaPlugin.openPreferencesWindow();
+              },
+              child: Text('show consent'),
+            ),
+          ],
         ),
       ),
     );
