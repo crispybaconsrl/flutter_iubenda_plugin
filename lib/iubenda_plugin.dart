@@ -15,16 +15,17 @@ class IubendaPlugin {
     return version;
   }
 
-  Future<void> getUserConsent({required String siteId, required String cookiesId}) async {
+  Future<bool> getUserConsent({required String siteId, required String cookiesId}) async {
     final iubendaData = IubendaData(siteId: siteId, cookiesId: cookiesId);
     final response = await IubendaPluginPlatform.instance.getUserConsent(iubendaData: iubendaData);
     final bool consent = response.consent;
     final bool isGooglePersonalised = response.isGooglePersonalised;
     _cacheClient.write(key: "consent", value: consent);
     _cacheClient.write(key: "is_google_personalised", value: isGooglePersonalised);
+    return consent;
   }
 
-  Future<void> openPreferences() async {
+  Future<bool> openPreferences() async {
     final siteId = _cacheClient.read(key: 'siteId') as String?;
     final cookiesId = _cacheClient.read(key: 'cookiesId') as String?;
     if (siteId != null && cookiesId != null) {
@@ -34,7 +35,9 @@ class IubendaPlugin {
       final bool isGooglePersonalised = response.isGooglePersonalised;
       _cacheClient.write(key: "consent", value: consent);
       _cacheClient.write(key: "is_google_personalised", value: isGooglePersonalised);
+      return consent;
     }
+    return false;
   }
 
   static bool hasUserConsent() {
@@ -45,14 +48,14 @@ class IubendaPlugin {
     return _cacheClient.read(key: 'is_google_personalised') ?? false;
   }
 
-  static void checkConsent({required String siteId, required String cookiesId}) async {
+  static Future<bool> checkConsent({required String siteId, required String cookiesId}) async {
     _cacheClient.write(key: "siteId", value: siteId);
     _cacheClient.write(key: "cookiesId", value: cookiesId);
-    final consent = await _iubendaPlugin.getUserConsent(siteId: siteId, cookiesId: cookiesId);
+    return await _iubendaPlugin.getUserConsent(siteId: siteId, cookiesId: cookiesId);
   }
 
-  static void openPreferencesWindow() async {
-    await _iubendaPlugin.openPreferences();
+  static Future<bool> openPreferencesWindow() async {
+    return await _iubendaPlugin.openPreferences();
   }
 
 }
