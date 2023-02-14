@@ -14,3 +14,11 @@ class IubendaData {
         'showPreferences': showPreferences,
       };
 }
+
+class IubendaResponse {
+  final bool consent;
+  final bool isGooglePersonalised;
+
+  const IubendaResponse(
+      {required this.consent, required this.isGooglePersonalised});
+}

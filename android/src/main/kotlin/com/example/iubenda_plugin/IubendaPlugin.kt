@@ -83,9 +83,11 @@ class IubendaPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
                 print(data)
                 if (data != null) {
                     val consentValue = data.getBooleanExtra("consent_key", false)
+                    val isGoogleAdsPersonalised = data.getBooleanExtra("google_ads_key", false)
                     var json = JSONObject()
                     json.put("consent", consentValue)
-                    consentResult.success(consentValue)
+                    json.put("google_ads",isGoogleAdsPersonalised)
+                    consentResult.success(json.toString())
                     return consentValue;
                 }
             }

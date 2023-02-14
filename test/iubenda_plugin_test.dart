@@ -13,7 +13,7 @@ class MockIubendaPluginPlatform
   Future<String?> getPlatformVersion() => Future.value('42');
 
   @override
-  Future<bool> getUserConsent({required IubendaData iubendaData}) => Future.value(true);
+  Future<IubendaResponse> getUserConsent({required IubendaData iubendaData}) => Future.value(const IubendaResponse(consent: true, isGooglePersonalised: true));
 
 }
 
@@ -30,13 +30,5 @@ void main() {
     IubendaPluginPlatform.instance = fakePlatform;
 
     expect(await iubendaPlugin.getPlatformVersion(), '42');
-  });
-
-  test('check_consent', () async {
-    IubendaPlugin iubendaPlugin = IubendaPlugin();
-    MockIubendaPluginPlatform fakePlatform = MockIubendaPluginPlatform();
-    IubendaPluginPlatform.instance = fakePlatform;
-
-    expect(await iubendaPlugin.getUserConsent(siteId: "*****", cookiesId: "******"), true);
   });
 }

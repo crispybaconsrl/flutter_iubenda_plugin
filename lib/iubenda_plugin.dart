@@ -15,37 +15,44 @@ class IubendaPlugin {
     return version;
   }
 
-  Future<bool> getUserConsent({required String siteId, required String cookiesId}) async {
+  Future<void> getUserConsent({required String siteId, required String cookiesId}) async {
     final iubendaData = IubendaData(siteId: siteId, cookiesId: cookiesId);
-    final bool consent = await IubendaPluginPlatform.instance.getUserConsent(iubendaData: iubendaData);
-    return consent;
+    final response = await IubendaPluginPlatform.instance.getUserConsent(iubendaData: iubendaData);
+    final bool consent = response.consent;
+    final bool isGooglePersonalised = response.isGooglePersonalised;
+    _cacheClient.write(key: "consent", value: consent);
+    _cacheClient.write(key: "is_google_personalised", value: isGooglePersonalised);
   }
 
-  Future<bool> openPreferences() async {
+  Future<void> openPreferences() async {
     final siteId = _cacheClient.read(key: 'siteId') as String?;
     final cookiesId = _cacheClient.read(key: 'cookiesId') as String?;
     if (siteId != null && cookiesId != null) {
       final iubendaData = IubendaData(siteId: siteId, cookiesId: cookiesId, showPreferences: true);
-      final bool consent = await IubendaPluginPlatform.instance.getUserConsent(iubendaData: iubendaData);
-      return consent;
+      final response = await IubendaPluginPlatform.instance.getUserConsent(iubendaData: iubendaData);
+      final bool consent = response.consent;
+      final bool isGooglePersonalised = response.isGooglePersonalised;
+      _cacheClient.write(key: "consent", value: consent);
+      _cacheClient.write(key: "is_google_personalised", value: isGooglePersonalised);
     }
-    return false;
   }
 
   static bool hasUserConsent() {
     return _cacheClient.read(key: 'consent') ?? false;
   }
 
+  static bool isGooglePersonalised() {
+    return _cacheClient.read(key: 'is_google_personalised') ?? false;
+  }
+
   static void checkConsent({required String siteId, required String cookiesId}) async {
     _cacheClient.write(key: "siteId", value: siteId);
     _cacheClient.write(key: "cookiesId", value: cookiesId);
     final consent = await _iubendaPlugin.getUserConsent(siteId: siteId, cookiesId: cookiesId);
-    _cacheClient.write(key: "consent", value: consent);
   }
 
   static void openPreferencesWindow() async {
-    final consent = await _iubendaPlugin.openPreferences();
-    _cacheClient.write(key: "consent", value: consent);
+    await _iubendaPlugin.openPreferences();
   }
 
 }

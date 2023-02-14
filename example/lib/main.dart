@@ -110,6 +110,13 @@ class NewScreen extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
+                final isGooglePersonalised = IubendaPlugin.isGooglePersonalised();
+                print("google is personalised: $isGooglePersonalised");
+              },
+              child: Text('google ads'),
+            ),
+            TextButton(
+              onPressed: () {
                 final consent = IubendaPlugin.openPreferencesWindow();
               },
               child: Text('show consent'),
