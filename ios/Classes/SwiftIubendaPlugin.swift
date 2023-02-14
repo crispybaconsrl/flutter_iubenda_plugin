@@ -16,6 +16,8 @@ public class SwiftIubendaPlugin: NSObject, FlutterPlugin {
     
     private var bannerIsShowed = false
     private var isConsentInvoked = false
+    private let notificationCenter = NotificationCenter.default
+    private let notificationName = Notification.Name(NSNotification.Name.ConsentChanged.rawValue)
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "iubenda_plugin", binaryMessenger: registrar.messenger())
@@ -23,14 +25,6 @@ public class SwiftIubendaPlugin: NSObject, FlutterPlugin {
         registrar.addMethodCallDelegate(instance, channel: channel)
         /** Registers the plugin as a receiver of UIApplicationDelegate calls.*/
         registrar.addApplicationDelegate(instance)
-        let notificationCenter = NotificationCenter.default
-        let notificationName = Notification.Name(NSNotification.Name.ConsentChanged.rawValue)
-        notificationCenter.addObserver(
-            instance,
-            selector: #selector(consentDidChange(_:)),
-            name: notificationName,
-            object: nil
-        )
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -59,7 +53,7 @@ public class SwiftIubendaPlugin: NSObject, FlutterPlugin {
                 if showPreferences {
                     IubendaCMP.openPreferences(from: currentVC)
                 } else {
-                    var hasExpressedPreferences = IubendaCMP.storage.preferenceExpressed
+                    let hasExpressedPreferences = IubendaCMP.storage.preferenceExpressed
                     if hasExpressedPreferences {
                         returnConsentResult()
                     }
@@ -77,8 +71,8 @@ public class SwiftIubendaPlugin: NSObject, FlutterPlugin {
             userConsent = IubendaCMP.isConsentGiven()
         }
         
-        var purposeString = IubendaCMP.storage.purposeConsents
-        var isGooglePersonalised = checkPersonalizedAds(purposes: purposeString)
+        let purposeString = IubendaCMP.storage.purposeConsents
+        let isGooglePersonalised = checkPersonalizedAds(purposes: purposeString)
         if let strongConsentResult = consentResult {
             strongConsentResult(isGooglePersonalised)
         }
@@ -90,11 +84,11 @@ public class SwiftIubendaPlugin: NSObject, FlutterPlugin {
             return false
         } else {
             var isPersonalized = true
-            var googlePersonalisedPurposes: [Int] = [1,2,3,4,7,9,10]
+            let googlePersonalisedPurposes: [Int] = [1,2,3,4,7,9,10]
             
             for (index, c) in purposes.enumerated() {
                 if googlePersonalisedPurposes.contains(index + 1) {
-                    var purposeValue = convertStringToBoolean(value: c)
+                    let purposeValue = convertStringToBoolean(value: c)
                     isPersonalized = isPersonalized && purposeValue
                 }
             }
@@ -109,9 +103,32 @@ public class SwiftIubendaPlugin: NSObject, FlutterPlugin {
             return false
         }
     
-    /** App Delegate Methods*/
+    // MARK: - App Delegate Methods
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [AnyHashable : Any] = [:]) -> Bool {
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(consentDidChange(_:)),
+            name: notificationName,
+            object: nil
+        )
+        
         return true
+    }
+    
+    public func applicationWillTerminate(_ application: UIApplication) {
+        notificationCenter.removeObserver(self, name: notificationName, object: nil)
+    }
+    
+    public func applicationWillEnterForeground(_ application: UIApplication) {
+        if bannerIsShowed {
+            returnConsentResult()
+        }
+    }
+    
+    public func applicationWillResignActive(_ application: UIApplication) {
+        if (bannerIsShowed && isConsentInvoked) {
+            returnConsentResult()
+        }
     }
     
     func viewController(with window: UIWindow?) -> UIViewController? {
