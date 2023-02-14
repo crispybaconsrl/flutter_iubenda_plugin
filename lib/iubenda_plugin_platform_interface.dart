@@ -28,7 +28,7 @@ abstract class IubendaPluginPlatform extends PlatformInterface {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
-  Future<bool> getUserConsent({required IubendaData iubendaData}) {
+  Future<IubendaResponse> getUserConsent({required IubendaData iubendaData}) {
     throw UnimplementedError('getUserConsent() has not been implemented.');
   }
 }

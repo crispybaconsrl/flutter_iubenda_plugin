@@ -93,14 +93,12 @@ class Iub : AppCompatActivity(), IubendaCMPChangeListener {
     }
 
     private fun returnConsentResult(consent: Boolean? = null) {
-        var userConsent = consent;
-        if (userConsent == null) {
-            userConsent = IubendaCMP.isConsentGiven()
-        }
         val resultIntent = Intent()
+        val consent = IubendaCMP.isConsentGiven()
         val purposeString = IubendaCMP.getStorage().purposesString
         val isGooglePersonalised = checkPersonalizedAds(purposes = purposeString)
-        resultIntent.putExtra("consent_key", isGooglePersonalised)
+        resultIntent.putExtra("google_ads_key", isGooglePersonalised)
+        resultIntent.putExtra("consent_key", consent)
         setResult(RESULT_OK, resultIntent)
         this.finish()
     }
@@ -123,9 +121,6 @@ class Iub : AppCompatActivity(), IubendaCMPChangeListener {
     }
 
     private fun convertStringToBoolean(value: Char) : Boolean {
-        if (value == '1') {
-            return true
-        }
-        return false
+        return value == '1'
     }
 }

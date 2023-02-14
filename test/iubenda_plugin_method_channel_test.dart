@@ -30,6 +30,6 @@ void main() {
   });
 
   test('check_consent', () async {
-    expect(await platform.getUserConsent(iubendaData: IubendaData(siteId: "*******", cookiesId: "*******")), true);
+    expect(await platform.getUserConsent(iubendaData: const IubendaData(siteId: "*******", cookiesId: "*******")), true);
   });
 }
