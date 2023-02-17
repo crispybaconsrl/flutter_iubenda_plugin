@@ -31,7 +31,9 @@ class _MyAppState extends State<MyApp> {
 
   chechConsent() {
     Future.delayed(const Duration(seconds: 5), () {
-      IubendaPlugin.checkConsent(siteId: "2938102", cookiesId: "87278796");
+      IubendaPlugin.checkConsent(siteId: "2938102", cookiesId: "87278796").then((value) =>
+      value
+      );
     });
   }
 
