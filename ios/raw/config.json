@@ -1,0 +1,12 @@
+{
+    "banner": {
+        "acceptButtonDisplay": "true",
+        "customizeButtonDisplay": "true",
+        "backgroundColor": "#FFF",
+        "textColor": "#FFFFFF",
+        "acceptButtonColor": "#FD1D1D",
+        "acceptButtonCaptionColor": "white",
+        "customizeButtonColor": "transparent",
+        "customizeButtonCaptionColor": "#FFF"
+    }
+}

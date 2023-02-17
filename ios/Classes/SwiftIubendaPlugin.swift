@@ -46,6 +46,9 @@ public class SwiftIubendaPlugin: NSObject, FlutterPlugin {
             config.siteId = siteId ?? ""
             config.cookiePolicyId = cokiesId ?? ""
             config.acceptIfDismissed = false
+            config.cssFile = Bundle.main.path(forResource: "custom_style", ofType: "css")
+            config.jsonFile = Bundle.main.path(forResource: "config", ofType: "json")
+            config.applyStyles = true
             
             bannerIsShowed = false
             IubendaCMP.initialize(with: config)
@@ -57,8 +60,8 @@ public class SwiftIubendaPlugin: NSObject, FlutterPlugin {
                     if hasExpressedPreferences {
                         returnConsentResult()
                     }
+                    IubendaCMP.askConsent(from: currentVC)
                 }
-                IubendaCMP.askConsent(from: currentVC)
             }
         default:
             result(FlutterMethodNotImplemented)
