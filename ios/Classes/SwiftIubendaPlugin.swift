@@ -73,8 +73,19 @@ public class SwiftIubendaPlugin: NSObject, FlutterPlugin {
         
         let purposeString = IubendaCMP.storage.purposeConsents
         let isGooglePersonalised = checkPersonalizedAds(purposes: purposeString)
+        let resultDictionary: [String: Bool] = [
+            "google_ads": isGooglePersonalised,
+            "consent": userConsent!]
+        // Convert the Swift object to a JSON object
+        let jsonObject = try? JSONSerialization.data(withJSONObject: resultDictionary, options: [])
+
+        // Convert the JSON object to a string
+        let jsonString = String(data: jsonObject!, encoding: .utf8)
+
+        // Print the resulting JSON string
+        print(jsonString!)
         if let strongConsentResult = consentResult {
-            strongConsentResult(isGooglePersonalised)
+            strongConsentResult(jsonString)
         }
         
     }
@@ -159,9 +170,9 @@ public class SwiftIubendaPlugin: NSObject, FlutterPlugin {
                     // disable Google personalized ADs
                 }
                 currentVC.dismiss(animated: true)
-                returnConsentResult()
             }
         }
+        returnConsentResult()
         print("Iubenda googlePersonalied: \(IubendaCMP.storage.googlePersonalized)")
     }
     
