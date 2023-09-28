@@ -23,8 +23,8 @@ class IubendaPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     /// when the Flutter Engine is detached from the Activity
     private lateinit var channel: MethodChannel
     private lateinit var activity: Activity
-    private lateinit var consentResult: Result
-    private val CHECK_CONSENT_FROM_IUBENDA = 36
+    private  var consentResult: Result? = null
+    private val CHECK_CONSENT_FROM_IUBENDA = 367
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "iubenda_plugin")
@@ -81,13 +81,14 @@ class IubendaPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
         if (requestCode == CHECK_CONSENT_FROM_IUBENDA) {
             if (resultCode == Activity.RESULT_OK) {
                 print(data)
-                if (data != null) {
+                if (data != null && consentResult != null) {
                     val consentValue = data.getBooleanExtra("consent_key", false)
                     val isGoogleAdsPersonalised = data.getBooleanExtra("google_ads_key", false)
                     var json = JSONObject()
                     json.put("consent", consentValue)
                     json.put("google_ads",isGoogleAdsPersonalised)
-                    consentResult.success(json.toString())
+
+                    consentResult!!.success(json.toString())
                     return consentValue;
                 }
             }

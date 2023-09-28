@@ -1,5 +1,4 @@
 {
-  "lang": "en",
   "siteId": 2938102,
   "cookiePolicyId": 87278796,
   "consentOnContinuedBrowsing": false,
@@ -8,6 +7,7 @@
   "floatingPreferencesButtonDisplay": "bottom-right",
   "enableTcf": true,
   "googleAdditionalConsentMode": true,
+  "countryDetection": true,
   "tcfPurposes": {
     "1": true,
     "2": true,
