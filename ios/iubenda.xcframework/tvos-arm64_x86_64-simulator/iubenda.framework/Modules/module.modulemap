@@ -1,0 +1,4 @@
+framework module iubenda {
+  header "iubenda-Swift.h"
+  requires objc
+}
