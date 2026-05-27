@@ -81,16 +81,18 @@ class IubendaPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
         if (requestCode == CHECK_CONSENT_FROM_IUBENDA) {
             if (resultCode == Activity.RESULT_OK) {
                 print(data)
-                if (data != null && consentResult != null) {
+                if (data != null) {
+                    val pendingResult = consentResult ?: return false
+                    consentResult = null
+
                     val consentValue = data.getBooleanExtra("consent_key", false)
                     val isGoogleAdsPersonalised = data.getBooleanExtra("google_ads_key", false)
                     var json = JSONObject()
                     json.put("consent", consentValue)
                     json.put("google_ads",isGoogleAdsPersonalised)
 
-                    consentResult!!.success(json.toString())
-                    consentResult = null
-                    return consentValue;
+                    pendingResult.success(json.toString())
+                    return true
                 }
             }
         }
