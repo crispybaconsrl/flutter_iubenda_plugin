@@ -56,9 +56,8 @@ public class SwiftIubendaPlugin: NSObject, FlutterPlugin {
                 if showPreferences {
                     IubendaCMP.openPreferences(from: currentVC)
                 } else {
-                    let hasExpressedPreferences = IubendaCMP.storage.preferenceExpressed
-                    if hasExpressedPreferences {
-                        returnConsentResult()
+                    if IubendaCMP.isConsentGiven() {
+                       returnConsentResult()
                     }
                     IubendaCMP.askConsent(from: currentVC)
                 }
