@@ -89,6 +89,7 @@ class IubendaPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
                     json.put("google_ads",isGoogleAdsPersonalised)
 
                     consentResult!!.success(json.toString())
+                    consentResult = null
                     return consentValue;
                 }
             }
