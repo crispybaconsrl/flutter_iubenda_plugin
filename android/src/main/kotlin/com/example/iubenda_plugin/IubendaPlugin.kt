@@ -23,7 +23,6 @@ class IubendaPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     /// when the Flutter Engine is detached from the Activity
     private lateinit var channel: MethodChannel
     private lateinit var activity: Activity
-    private var activityBinding: ActivityPluginBinding? = null
     private  var consentResult: Result? = null
     private val CHECK_CONSENT_FROM_IUBENDA = 367
 
@@ -61,15 +60,13 @@ class IubendaPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-        activityBinding = binding
         binding.addActivityResultListener(this)
         channel.setMethodCallHandler(this)
         activity = binding.activity
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
-        activityBinding?.removeActivityResultListener(this)
-        activityBinding = null
+
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
@@ -77,8 +74,7 @@ class IubendaPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     }
 
     override fun onDetachedFromActivity() {
-        activityBinding?.removeActivityResultListener(this)
-        activityBinding = null
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
@@ -93,11 +89,11 @@ class IubendaPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
                     json.put("google_ads",isGoogleAdsPersonalised)
 
                     consentResult!!.success(json.toString())
-                    consentResult = null
                     return consentValue;
                 }
             }
         }
         return false
     }
+
 }
